@@ -13,10 +13,11 @@ import ReactDOM from "react-dom";
 
 export class MarkdownEditor extends BaseComponent<{value: string, onChange?: Function, options: any, toolbar?: boolean}, {cursorState: any, isFocused: boolean}> {
 	static defaultProps = {toolbar: true};
-	
+
+    textareaRef = React.createRef<HTMLTextAreaElement>();
 	codeMirror;
 	_currentCodemirrorValue;
-	
+
 	getInitialState() {
 		return {
 			isFocused: false,
@@ -25,7 +26,7 @@ export class MarkdownEditor extends BaseComponent<{value: string, onChange?: Fun
 	}
 
 	ComponentDidMount() {
-		this.codeMirror = CM.fromTextArea(ReactDOM.findDOMNode(this.refs.codemirror), this.getOptions());
+		this.codeMirror = CM.fromTextArea(this.textareaRef.current, this.getOptions());
 		this.codeMirror.on("change", this.codemirrorValueChanged.bind(this));
 		this.codeMirror.on("focus", this.focusChanged.bind(this, true));
 		this.codeMirror.on("blur", this.focusChanged.bind(this, false));
@@ -82,7 +83,7 @@ export class MarkdownEditor extends BaseComponent<{value: string, onChange?: Fun
 			<div className="MDEditor">
 				{toolbar && <MarkdownToolbar editor={()=>this}/>}
 				<div className={editorClassName}>
-					<textarea ref="codemirror" defaultValue={this.props.value} autoComplete="off" />
+					<textarea ref={this.textareaRef} defaultValue={this.props.value} autoComplete="off" />
 				</div>
 			</div>
 		);
