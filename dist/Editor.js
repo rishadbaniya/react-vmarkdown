@@ -8,8 +8,11 @@ import "codemirror/addon/scroll/simplescrollbars.js";
 import { MarkdownToolbar } from "./Toolbar.js";
 import { BaseComponent } from "react-vextensions";
 import React from "react";
-import ReactDOM from "react-dom";
 export class MarkdownEditor extends BaseComponent {
+    constructor() {
+        super(...arguments);
+        this.textareaRef = React.createRef();
+    }
     getInitialState() {
         return {
             isFocused: false,
@@ -17,7 +20,7 @@ export class MarkdownEditor extends BaseComponent {
         };
     }
     ComponentDidMount() {
-        this.codeMirror = CM.fromTextArea(ReactDOM.findDOMNode(this.refs.codemirror), this.getOptions());
+        this.codeMirror = CM.fromTextArea(this.textareaRef.current, this.getOptions());
         this.codeMirror.on("change", this.codemirrorValueChanged.bind(this));
         this.codeMirror.on("focus", this.focusChanged.bind(this, true));
         this.codeMirror.on("blur", this.focusChanged.bind(this, false));
@@ -65,7 +68,7 @@ export class MarkdownEditor extends BaseComponent {
         return (React.createElement("div", { className: "MDEditor" },
             toolbar && React.createElement(MarkdownToolbar, { editor: () => this }),
             React.createElement("div", { className: editorClassName },
-                React.createElement("textarea", { ref: "codemirror", defaultValue: this.props.value, autoComplete: "off" }))));
+                React.createElement("textarea", { ref: this.textareaRef, defaultValue: this.props.value, autoComplete: "off" }))));
     }
 }
 MarkdownEditor.defaultProps = { toolbar: true };

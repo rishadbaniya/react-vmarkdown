@@ -1,9 +1,9 @@
-/// <reference types="react" />
 import "codemirror/mode/xml/xml.js";
 import "codemirror/mode/markdown/markdown.js";
 import "codemirror/addon/edit/continuelist.js";
 import "codemirror/addon/scroll/simplescrollbars.js";
 import { BaseComponent } from "react-vextensions";
+import React from "react";
 export declare class MarkdownEditor extends BaseComponent<{
     value: string;
     onChange?: Function;
@@ -16,6 +16,7 @@ export declare class MarkdownEditor extends BaseComponent<{
     static defaultProps: {
         toolbar: boolean;
     };
+    textareaRef: React.RefObject<HTMLTextAreaElement>;
     codeMirror: any;
     _currentCodemirrorValue: any;
     getInitialState(): {
@@ -30,5 +31,5 @@ export declare class MarkdownEditor extends BaseComponent<{
     focusChanged(focused: any): void;
     updateCursorState(): void;
     codemirrorValueChanged(doc: any, change: any): void;
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }
